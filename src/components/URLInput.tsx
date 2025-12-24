@@ -1,4 +1,4 @@
-import { Info } from "lucide-react";
+import { Search, Info, Globe } from "lucide-react";
 
 interface URLInputProps {
   url: string;
@@ -16,38 +16,55 @@ export default function URLInput({
   error,
 }: URLInputProps) {
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-100">
+    <div className="bg-card rounded-3xl shadow-2xl shadow-primary/5 p-6 md:p-10 mb-10 border border-border">
       <div className="max-w-3xl mx-auto">
-        <label className="block text-sm font-semibold text-gray-700 mb-3">
-          Enter Website URL to Analyze
-        </label>
-        <div className="flex gap-3">
-          <input
-            type="text"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && onAnalyze()}
-            placeholder="https://example.com"
-            className="flex-1 px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-lg"
-          />
-          <button
-            onClick={onAnalyze}
-            disabled={loading}
-            className="px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-indigo-700 disabled:from-gray-400 disabled:to-gray-500 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-          >
-            {loading ? "Analyzing..." : "Analyze"}
-          </button>
+
+        <div className="relative group">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <Globe className="h-5 w-5 text-secondary group-focus-within:text-primary transition-colors" />
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <input
+              type="text"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && onAnalyze()}
+              placeholder="e.g. example.com"
+              className="block w-full pl-12 pr-4 py-4 bg-background border border-border rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-lg font-medium placeholder:text-secondary/50 outline-none"
+            />
+            <button
+              onClick={onAnalyze}
+              disabled={loading}
+              className="sm:w-48 cursor-pointer px-8 py-4 bg-primary text-white font-bold rounded-2xl hover:bg-primary/90 disabled:bg-secondary/30 transition-all shadow-lg hover:shadow-primary/20 flex items-center justify-center gap-2 group/btn"
+            >
+              {loading ? (
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              ) : (
+                <>
+                  <Search className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
+                  <span>Analyze</span>
+                </>
+              )}
+            </button>
+          </div>
         </div>
+
         {error && (
-          <div className="mt-4 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg">
-            <p className="text-red-800 text-sm font-medium">{error}</p>
+          <div className="mt-6 p-4 bg-red-500/5 border border-red-500/20 rounded-2xl">
+            <p className="text-red-600 text-sm font-semibold">{error}</p>
           </div>
         )}
-        <p className="mt-3 text-xs text-gray-500 flex items-center gap-2">
-          <Info className="w-3 h-3" />
-          Analysis typically takes 15-30 seconds. We test on mobile devices
-          for real-world performance.
-        </p>
+
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm text-secondary font-medium">
+          <div className="flex items-center gap-2">
+            <Info className="w-4 h-4 text-primary" />
+            <span>Mobile-first testing</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Search className="w-4 h-4 text-primary" />
+            <span>Lighthouse v12 Analysis</span>
+          </div>
+        </div>
       </div>
     </div>
   );

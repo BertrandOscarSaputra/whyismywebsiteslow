@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Header from "@/components/Header";
 import URLInput from "@/components/URLInput";
 import LoadingState from "@/components/LoadingState";
 import ScoreCards from "@/components/ScoreCards";
@@ -64,10 +63,18 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      <Header />
+    <div className="min-h-screen bg-background">
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-12 md:py-24">
+        <div className="text-center mb-12">
+          <h1 className="text-5xl md:text-7xl font-display font-black text-foreground mb-6 tracking-tight">
+            Why Is My Website <span className="text-primary underline decoration-primary/30 decoration-8 underline-offset-8">Slow?</span>
+          </h1>
+          <p className="text-secondary text-xl md:text-2xl font-medium max-w-2xl mx-auto">
+            Get a professional performance audit with actionable steps to win more users.
+          </p>
+        </div>
+
         <URLInput
           url={url}
           setUrl={setUrl}

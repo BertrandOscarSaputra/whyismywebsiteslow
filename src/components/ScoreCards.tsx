@@ -1,5 +1,6 @@
-import { getScoreColor, getScoreLabel } from "@/lib/utils";
+import { getScoreLabel } from "@/lib/utils";
 import type { AnalysisResult } from "@/types";
+import { Gauge, Zap, Info } from "lucide-react";
 
 interface ScoreCardsProps {
   result: AnalysisResult;
@@ -7,51 +8,112 @@ interface ScoreCardsProps {
 
 export default function ScoreCards({ result }: ScoreCardsProps) {
   return (
-    <div className="grid md:grid-cols-2 gap-6">
-      {/* Main Score Card */}
-      <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-        <div className="text-center">
-          <div className="mb-4">
-            <div
-              className={`text-7xl font-black bg-gradient-to-br ${getScoreColor(
-                result.performanceScore
-              )} bg-clip-text text-transparent mb-2`}
-            >
-              {result.performanceScore}
+    <div className="grid lg:grid-cols-3 gap-6">
+      {/* Lighthouse Score Card */}
+      <div className="lg:col-span-2 bg-card rounded-3xl shadow-xl shadow-primary/5 p-8 border border-border overflow-hidden relative">
+        <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+          <Gauge className="w-32 h-32" />
+        </div>
+        
+        <div className="flex flex-col md:flex-row items-center gap-8">
+          <div className="relative flex-shrink-0">
+            <svg className="w-48 h-48 transform -rotate-90">
+              <circle
+                cx="96"
+                cy="96"
+                r="88"
+                stroke="currentColor"
+                strokeWidth="12"
+                fill="transparent"
+                className="text-border"
+              />
+              <circle
+                cx="96"
+                cy="96"
+                r="88"
+                stroke="currentColor"
+                strokeWidth="12"
+                fill="transparent"
+                strokeDasharray={552.92}
+                strokeDashoffset={552.92 * (1 - result.performanceScore / 100)}
+                strokeLinecap="round"
+                className={`transition-all duration-1000 ease-out ${
+                  result.performanceScore >= 90 ? "text-green-500" : 
+                  result.performanceScore >= 50 ? "text-yellow-500" : "text-red-500"
+                }`}
+              />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span className="text-5xl font-display font-black text-foreground">
+                {result.performanceScore}
+              </span>
+              <span className="text-sm font-bold text-secondary uppercase tracking-wider">
+                Score
+              </span>
             </div>
-            <div className="text-xl font-semibold text-gray-700">
-              {getScoreLabel(result.performanceScore)}
-            </div>
-            <p className="text-sm text-gray-500 mt-1">
-              Google Lighthouse Score
-            </p>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-            <div
-              className={`h-full bg-gradient-to-r ${getScoreColor(
-                result.performanceScore
-              )} transition-all duration-1000`}
-              style={{ width: `${result.performanceScore}%` }}
-            ></div>
+
+          <div className="flex-1 text-center md:text-left">
+            <h3 className="text-2xl font-display font-bold text-foreground mb-2">
+              Performance Index
+            </h3>
+            <p className="text-secondary leading-relaxed mb-4">
+              This score summarizes how your page performs across multiple audits including speed, accessibility, and best practices.
+            </p>
+            <div className="flex flex-wrap justify-center md:justify-start gap-3">
+              <span className={`px-4 py-1.5 rounded-full text-sm font-bold border ${
+                result.performanceScore >= 90 ? "bg-green-50 text-green-700 border-green-200" : 
+                result.performanceScore >= 50 ? "bg-yellow-50 text-yellow-700 border-yellow-200" : "bg-red-50 text-red-700 border-red-200"
+              }`}>
+                {getScoreLabel(result.performanceScore)}
+              </span>
+              <span className="px-4 py-1.5 rounded-full text-sm font-bold bg-background text-secondary border border-border flex items-center gap-2">
+                <Info className="w-4 h-4" />
+                Lighthouse v12
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Simplified Score Card */}
-      <div className="bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl shadow-xl p-8 text-white">
-        <h3 className="text-2xl font-bold mb-4">Speed Feeling Score</h3>
-        <div className="text-6xl font-black mb-3">{result.score}</div>
-        <p className="text-blue-100 mb-4">
-          This is how fast your website feels to real users, explained
-          in simple terms.
+      {/* Speed Experience Card */}
+      <div className="bg-primary rounded-3xl shadow-xl shadow-primary/20 p-8 text-white relative overflow-hidden">
+        <div className="absolute -bottom-6 -right-6 text-white/10 rotate-12 pointer-events-none">
+          <Zap className="w-48 h-48" />
+        </div>
+        
+        <h3 className="text-xl font-display font-bold mb-6 flex items-center gap-2">
+          <Zap className="w-5 h-5" />
+          User Experience
+        </h3>
+        
+        <div className="mb-6">
+          <div className="text-6xl font-display font-black mb-1">
+            {result.score}
+          </div>
+          <div className="text-primary-100 font-medium text-sm">
+            Experience Score (%)
+          </div>
+        </div>
+
+        <p className="text-primary-50 text-sm leading-relaxed mb-8 relative z-10">
+          {result.score >= 80
+            ? "Your website provides a seamless experience. Users are unlikely to bounce due to speed issues."
+            : result.score >= 60
+            ? "There's noticeable lag in the user journey. Optimizing this could directly improve conversion rates."
+            : "Significant performance bottlenecks are hurting your user retention. Immediate action is recommended."}
         </p>
-        <div className="bg-white/20 backdrop-blur rounded-lg p-3 text-sm">
-          <p className="text-blue-50">
+
+        <div className="p-4 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 relative z-10">
+          <div className="text-xs font-bold text-primary-100 uppercase tracking-widest mb-2">
+            Key Takeaway
+          </div>
+          <p className="text-sm font-medium">
             {result.score >= 80
-              ? "🎉 Your site feels fast to users!"
+              ? "Keep maintaining these standards to stay ahead of competition."
               : result.score >= 60
-              ? "⚡ Room for improvement detected"
-              : "🐌 Users likely find your site slow"}
+              ? "Focus on 'Quick Wins' below to reach the 80+ elite category."
+              : "Prioritize the critical issues to fix the user experience first."}
           </p>
         </div>
       </div>
